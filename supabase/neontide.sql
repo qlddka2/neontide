@@ -42,3 +42,26 @@ revoke all on function public.nt_save_get() from public, anon;
 revoke all on function public.nt_save_put(jsonb, bigint, timestamptz, boolean) from public, anon;
 grant execute on function public.nt_save_get() to authenticated;
 grant execute on function public.nt_save_put(jsonb, bigint, timestamptz, boolean) to authenticated;
+
+-- ───────── v0.17.1 정식판 권한 ─────────
+-- 지금은 개발자가 직접 부여(아래 맨 끝 줄). 나중에 구글 플레이 결제 확인 서버가 이 표에 기록합니다.
+create table if not exists public.nt_entitlements (
+  user_id    uuid primary key references auth.users(id) on delete cascade,
+  full_game  boolean not null default false,
+  source     text not null default 'manual',
+  granted_at timestamptz not null default now()
+);
+alter table public.nt_entitlements enable row level security;
+revoke all on public.nt_entitlements from anon, authenticated;
+
+create or replace function public.nt_entitled()
+returns boolean language sql security definer stable set search_path = public as $$
+  select coalesce((select full_game from public.nt_entitlements where user_id = auth.uid()), false);
+$$;
+revoke all on function public.nt_entitled() from public, anon;
+grant execute on function public.nt_entitled() to authenticated;
+
+-- 개발자 계정에 정식판 부여 (그 구글 계정으로 게임에 한 번 로그인한 뒤에 실행해야 들어갑니다)
+insert into public.nt_entitlements (user_id, full_game, source)
+  select id, true, 'owner' from auth.users where email = 'bingkui1992@gmail.com'
+  on conflict (user_id) do update set full_game = true;

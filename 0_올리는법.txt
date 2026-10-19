@@ -1,0 +1,25 @@
+[네온 타이드 단독 페이지 올리는 법] — 퇴마 서바이벌(toema)과 같은 방식
+
+■ 처음 한 번 (저장소가 아직 없으면)
+1) github.com → 오른쪽 위 [+] → [New repository]
+   - Repository name: neontide / Public → [Create repository]
+2) [uploading an existing file] → 압축을 푼 파일·폴더를 통째로 끌어다 놓기 (이 txt는 빼도 됨) → [Commit changes]
+3) [Settings] → [Pages] → Source: Deploy from a branch → Branch: main / (root) → [Save]
+4) 1~2분 뒤: https://qlddka2.github.io/neontide/
+
+■ 구글 로그인 켜기 (v0.17.0, 한 번만)
+1) Supabase(퇴마·맞수와 같은 프로젝트) → SQL Editor → supabase/neontide.sql 내용 붙여 넣고 [Run]
+2) Supabase → Authentication → URL Configuration → Redirect URLs → [Add URL]
+   https://qlddka2.github.io/neontide/
+   (이미 https://qlddka2.github.io/** 처럼 별표 주소가 있으면 안 해도 됨)
+3) 구글 클라우드 쪽은 손댈 것 없음 (퇴마에서 만든 웹 클라이언트를 그대로 씀)
+4) 확인: 게임 첫 화면 '구글 로그인' → 로그인 → 다른 브라우저(또는 폰)에서 같은 계정으로 로그인하면 진행이 이어지는지
+
+■ v0.17.1 체험판 · 정식판 권한 (한 번만)
+1) Supabase SQL Editor에서 supabase/neontide.sql 전체를 다시 [Run] (여러 번 실행해도 안전)
+   - 맨 끝 줄이 bingkui1992@gmail.com 계정에 정식판을 줘요. 다른 구글 계정으로 로그인한다면 그 줄의 이메일을 바꿔서 실행
+2) 확인: 로그아웃 상태 = 체험판(낚시꾼 3명 · 1막까지), 내 계정 로그인 = 전부 열림
+3) 다른 사람에게 정식판을 줄 때(테스터 등): 그 사람이 한 번 로그인한 뒤 맨 끝 줄의 이메일만 바꿔 다시 실행
+
+■ 업데이트할 때
+- index.html과 sw.js를 덮어쓰기 (이번엔 config.js, privacy.html, supabase 폴더도 새로 올리기)
