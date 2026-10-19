@@ -1,9 +1,12 @@
-# 네온 타이드 · v0.16.0
+# 네온 타이드 · v0.17.0
 
 반쯤 잠긴 근미래 도시의 밤바다에서 생물을 낚아 카드로 싸우는 로그라이크 덱빌딩 게임입니다. 웹 브라우저(폰·PC)에서 바로 실행되고, 홈 화면에 앱처럼 설치할 수 있습니다(PWA).
 
 - 플레이: https://qlddka2.github.io/neontide/
 - 개인정보처리방침: https://qlddka2.github.io/neontide/privacy.html
+
+## 구글 로그인
+선택 사항. 로그인하면 진행 상황이 클라우드에 저장돼 다른 기기에서도 이어 할 수 있어요.
 
 ## 볼륨
 - 낚시꾼 8명 · 생물 72종(고대종 8 포함) · 도구·동료 17종 · 낚시 장비 17종
@@ -15,6 +18,8 @@
 - `sw.js` — 오프라인 실행 캐시 (배포할 때 VERSION 올리기)
 - `manifest.json`, `icons/` — 홈 화면 설치·공유 미리보기
 - `privacy.html` — 개인정보처리방침
+- `config.js` — 로그인 서버(Supabase) 공개 설정. 공개용 anon 키만 들어 있음
+- `supabase/neontide.sql` — 클라우드 저장 테이블·함수 (SQL Editor에서 한 번 실행)
 
 ## 업데이트
 새 버전의 `index.html`을 덮어쓰고, `sw.js`의 VERSION 숫자를 올립니다.
