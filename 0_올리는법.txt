@@ -21,5 +21,13 @@
 2) 확인: 로그아웃 상태 = 체험판(낚시꾼 3명 · 1막까지), 내 계정 로그인 = 전부 열림
 3) 다른 사람에게 정식판을 줄 때(테스터 등): 그 사람이 한 번 로그인한 뒤 맨 끝 줄의 이메일만 바꿔 다시 실행
 
+■ v0.17.2 베타 배포 (지금 상태)
+- config.js의 mode: 'beta' → 누구나 전부 플레이. 테스트 모드 버튼은 내 계정(bingkui1992@gmail.com)으로 로그인했을 때만 보임
+- 판매를 시작할 때 mode: 'paid' 로 한 글자만 바꿔 올리면 체험판(3명·1막) + 정식판(2,400원 → 1,300원)으로 바뀜
+- SQL: supabase/neontide.sql 전체를 한 번 더 [Run] (의견 테이블 nt_feedback 추가)
+- 의견 읽기: Supabase → Table Editor → nt_feedback (fun = 재미 점수, body = 내용, log = 플레이 기록)
+  또는 SQL Editor: select created_at, ver, fun, body from public.nt_feedback order by id desc;
+  log 칸을 복사해서 Claude에게 붙여 주면 밸런스 분석 가능
+
 ■ 업데이트할 때
 - index.html과 sw.js를 덮어쓰기 (이번엔 config.js, privacy.html, supabase 폴더도 새로 올리기)

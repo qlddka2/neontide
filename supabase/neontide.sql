@@ -65,3 +65,31 @@ grant execute on function public.nt_entitled() to authenticated;
 insert into public.nt_entitlements (user_id, full_game, source)
   select id, true, 'owner' from auth.users where email = 'bingkui1992@gmail.com'
   on conflict (user_id) do update set full_game = true;
+
+-- ───────── v0.17.2 베타 의견 ─────────
+-- 게임 안 '의견 보내기'가 여기에 쌓여요. 읽기: Table Editor → nt_feedback, 또는
+--   select created_at, ver, fun, body from public.nt_feedback order by id desc;
+create table if not exists public.nt_feedback (
+  id         bigserial primary key,
+  created_at timestamptz not null default now(),
+  user_id    uuid,
+  ver        text,
+  fun        int,
+  body       text,
+  log        text,
+  ua         text
+);
+alter table public.nt_feedback enable row level security;
+revoke all on public.nt_feedback from anon, authenticated;
+
+create or replace function public.nt_feedback_send(p_ver text, p_fun int, p_body text, p_log text, p_ua text)
+returns boolean language plpgsql security definer set search_path = public as $$
+begin
+  if coalesce(length(trim(p_body)), 0) = 0 and p_fun is null then raise exception 'empty'; end if;
+  if length(p_body) > 2000 or length(p_log) > 30000 or (p_fun is not null and (p_fun < 1 or p_fun > 5)) then raise exception 'invalid'; end if;
+  if (select count(*) from public.nt_feedback where created_at > now() - interval '1 minute') > 30 then raise exception 'busy'; end if;   -- 도배 막기
+  insert into public.nt_feedback (user_id, ver, fun, body, log, ua) values (auth.uid(), left(p_ver, 20), p_fun, p_body, p_log, left(p_ua, 200));
+  return true;
+end $$;
+revoke all on function public.nt_feedback_send(text, int, text, text, text) from public;
+grant execute on function public.nt_feedback_send(text, int, text, text, text) to anon, authenticated;
